@@ -1,4 +1,4 @@
-# get my external IP address to enter into NSG rule
+# get my external IP address to enter into NSG rules
 data "http" "myExtIp" {
     url = "http://ident.me/"
 }
