@@ -1,6 +1,15 @@
 # Terraform - how to securely deploy Azure resources
 
-This Project contains all files for my attempt at the servian techChallengeApp infra deployment.
+This Project contains all files for an attempt at the servian techChallengeApp infra deployment.
+
+The approach is minimal using basic linux Centos vm deployment, utilized use of keyvault to store secrets and azure storage for state files etc. in an attempt to add some security. 
+
+Upon provisioning it will take the IP of the host machine that ran the terraform script and add that to the nsg rules to limit access. Enabled ports for HTTP,HTTPS for testing and SSH for access.
+
+Used bootstrap to prepare the vm for some prereqs used to running the golang techchallenge app and some test.
+
+Main apps installed is golang for linux to run the techchallenge commands and lynx to test if the page is accessible.
+
 
 ## Content
 This folder contains the following files:
@@ -101,7 +110,7 @@ terraform plan -out main.tfplan
 
 Apply created plan
  ```bash
-terraform apply main.tfplan
+terraform apply main.tfplan -auto-approve
 ```
 
 Create private key if it hasn't been automatically created yet
@@ -114,13 +123,14 @@ Get public IP
 terraform output public_ip_address
 ```
 
-connect to the vm
+connect to the vm (password is admin123!)
  ```bash
 ssh -i id_rsa azureuser@<public_ip_address>
 ```
 
-Inside the vm set the path for golang to allow us to run the serve command
+Inside the vm go to root and set the path for golang to allow us to run the serve command
  ```bash
+sudo -i
 export PATH=$PATH:/usr/local/go/bin
 ```
 
@@ -139,3 +149,24 @@ Start serving request
  ```bash
 lynx http://localhost:3000
 ```
+
+exit vm
+ ```bash
+exit
+```
+
+set destroy flag
+ ```bash
+terraform plan -destroy -out main.destroy.tfplan
+```
+
+destroy/delete the resource
+ ```bash
+terraform apply main.destroy.tfplan
+```
+
+# Ideas for enhancement for running techchallenge serve 
+1. Convert to systemctl service
+2. Start service
+3. install nginx
+4. use port forward to allow access to the techchallenge page outside the vm via browser using public IP
