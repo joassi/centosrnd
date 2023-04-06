@@ -118,3 +118,24 @@ connect to the vm
  ```bash
 ssh -i id_rsa azureuser@<public_ip_address>
 ```
+
+Inside the vm set the path for golang to allow us to run the serve command
+ ```bash
+export PATH=$PATH:/usr/local/go/bin
+```
+
+Go to techchallenge app directory
+ ```bash
+cd /usr/local/golang/dist
+```
+
+Start serving request
+ ```bash
+sudo ./TechChallengeApp serve &
+```
+
+### Optional: test if webpage is up
+Start serving request
+ ```bash
+lynx http://localhost:3000
+```

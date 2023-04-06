@@ -1,0 +1,7 @@
+.terraform/providers/registry.terraform.io/hashicorp/azurerm/2.99.0/windows_amd64/terraform-provider-azurerm_v2.99.0_x5.exe
+.terraform/providers/registry.terraform.io/hashicorp/http/3.2.1/windows_amd64/terraform-provider-http_v3.2.1_x5.exe
+.terraform/providers/registry.terraform.io/hashicorp/random/3.4.3/windows_amd64/terraform-provider-random_v3.4.3_x5.exe
+.terraform/providers/registry.terraform.io/hashicorp/template/2.2.0/windows_amd64/terraform-provider-template_v2.2.0_x4.exe
+.terraform/providers/registry.terraform.io/hashicorp/tls/4.0.4/windows_amd64/terraform-provider-tls_v4.0.4_x5.exe
+.terraform.lock.hcl
+.terraform/terraform.tfstate
