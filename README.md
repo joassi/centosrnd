@@ -38,13 +38,15 @@ https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/ser
 
 ### 3. Create Azure Key vault
 You can execute the codes using bash/Azure Bash
-1.1 Change values of the variable depending on what you want 
+
+1.1 Change values of the variable depending on what you want
+ ```bash
     RESOURCE_GROUP_NAME=rnd
     STORAGE_ACCOUNT_NAME=tcastorageacc
     CONTAINER_NAME=tfstate
     VAULT_NAME=tcakeyvault
     SECRET_NAME=azureuser
-
+```
 1.2 Create a resource group to place the resources we will provision
  ```bash
 az group create --name $RESOURCE_GROUP_NAME --location australiaeast
@@ -85,7 +87,7 @@ https://learn.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?t
 
 
 ## Create the Resources with Terraform
-go to command line or powershell
+go to command line or powershell go to the folder directory location of the terraform scripts
 
 Initial terraform dependencies
  ```bash
