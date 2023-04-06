@@ -1,15 +1,19 @@
 # Terraform - how to securely deploy Azure resources
 
-This project contains code examples for securely deploying Azure resources.
-All code has been tested on macOS Mojave, Version 10.14.2. and Terraform 0.11.11.
+This Project contains all files for my attempt at the servian techChallengeApp infra deployment.
 
-The project is made up of single modules that are explained below.
+## Content
+This folder contains the following files:
 
-| Module | Description |
-| ------------- | ------------- |
-| [00_Preparation](../../../tree/master/Terraform/00_Preparation) | initial Terraform configuration |
-| [01_Deployment](../../../tree/master/Terraform/01_Deployment) | demo deployment of a Linux VM and creation of all dependend resources |
-
+| File | Description |
+|------|-------------|
+| README.md | this file |
+| [backend.tf](./backend.tf) | Azure CLI script to create Azure AD service principal |
+| [output.tf](./id_rsa) | Azure CLI script to create backend storage and Azure KeyVault to store storage account key |
+| [main.tf](./main.tf) | Bash script to export environment variables |
+| [script.sh](./script.sh) | Bash script to export environment variables |
+| [variables.tf](./variables.tf) | Bash script to export environment variables |
+| [providers.tf](./providers.tf) | Bash script to export environment variables |
 
 (TASK 9) This is a Readme with some details regarding the solution why and how its made.
 
