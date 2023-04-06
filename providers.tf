@@ -1,3 +1,4 @@
+#declare providers
 terraform {
   required_version = ">=0.12"
 
@@ -17,6 +18,7 @@ terraform {
   }
 }
 
+#declare service principal specs for authentication
 provider "azurerm" {
   features {}
    client_id       = "0bfc128c-440a-48b6-afea-33bcd398736e"

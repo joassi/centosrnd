@@ -3,25 +3,29 @@ data "http" "myExtIp" {
     url = "http://ident.me/"
 }
 
+#get keyvault storage
 data "azurerm_key_vault" "tcakeyv" {
   name                = "tcakeyvault"
   resource_group_name = "rnd"
 }
 
+#get secret from keyvaul to be used on vm provisioning
 data "azurerm_key_vault_secret" "mySecret" {
   name      = "azureuser"
   key_vault_id = data.azurerm_key_vault.tcakeyv.id
 }
 
-#shellscript
+#set shellscript for bootstrap
 data "template_file" "startupscript"{
   template = file ("script.sh")
 }
 
+#set resource group name
 resource "random_pet" "rg_name" {
   prefix = var.resource_group_name_prefix
 }
 
+#create resource group for vm and related resources
 resource "azurerm_resource_group" "rg" {
   location = var.resource_group_location
   name     = random_pet.rg_name.id
@@ -56,7 +60,8 @@ resource "azurerm_network_security_group" "tca_terraform_nsg" {
   name                = "tcaNetworkSecurityGroup"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-
+   
+  #enable SSH for inbound access for machines with IP similar to the one that provisioned the resources
   security_rule {
     name                       = "SSH"
     priority                   = 1001
@@ -68,6 +73,7 @@ resource "azurerm_network_security_group" "tca_terraform_nsg" {
     source_address_prefix      = "${data.http.myExtIp.body}" # reference to http data source
     destination_address_prefix = "*"
   }
+  #enable HTTPS for inbound access for machines with IP similar to the one that provisioned the resources
   security_rule {
     name                       = "HTTPS"
     priority                   = 1002
@@ -79,6 +85,7 @@ resource "azurerm_network_security_group" "tca_terraform_nsg" {
     source_address_prefix      = "${data.http.myExtIp.body}" # reference to http data source
     destination_address_prefix = "*"
   }
+  #enable HTTP for inbound access for machines with IP similar to the one that provisioned the resources
   security_rule {
     name                       = "HTTP"
     priority                   = 1003
@@ -145,33 +152,38 @@ resource "azurerm_linux_virtual_machine" "tca_vm" {
   network_interface_ids = [azurerm_network_interface.tca_terraform_nic.id]
   size                  = "Standard_DS1_v2"
 
+  #specify specs for the vm disc
   os_disk {
     name                 = "tcaOsDisk"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
-
+  
+  #specify specs for the vm image
   source_image_reference {
     publisher = var.linux_vm_image_publisher
     offer     = var.linux_vm_image_offer
     sku       = var.centos_7_gen2_sku
     version   = "latest"
   }
-
+  #specify authentication details for the vm
   computer_name                   = "tcaVM"
   admin_username                  = "azureuser"
-  #admin_password                  = "admin123!"
   admin_password                  ="${data.azurerm_key_vault_secret.mySecret.value}"
   disable_password_authentication = false
-
+  
+  #specify specs for the vm ssh key
   admin_ssh_key {
     username   = "azureuser"
     public_key = tls_private_key.example_ssh.public_key_openssh
   }
-
+  
+  #specify specs for the vm diagnostics
   boot_diagnostics {
     storage_account_uri = azurerm_storage_account.tca_storage_account.primary_blob_endpoint
   }
+
+  #call the script for bootstrap
   custom_data    = base64encode(data.template_file.startupscript.rendered)
 
 }

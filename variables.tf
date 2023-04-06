@@ -35,6 +35,8 @@ variable "centos_7_gen2_sku" {
   description = "SKU for latest CentOS 8 Gen2"
   default     = "7_9-gen2"
 }
+
+#for testing
 variable "centos_8_sku" {
   type        = string
   description = "SKU for latest CentOS 8 "

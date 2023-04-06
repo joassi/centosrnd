@@ -1,3 +1,5 @@
+
+# specify where to store terraform state
 terraform {
   backend "azurerm" {
     resource_group_name = "rnd"
