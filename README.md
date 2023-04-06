@@ -14,18 +14,68 @@ This folder contains the following files:
 | [script.sh](./script.sh) | Bash script to export environment variables |
 | [variables.tf](./variables.tf) | Bash script to export environment variables |
 | [providers.tf](./providers.tf) | Bash script to export environment variables |
+Note: there will be other files that will be created(or have been created) depending on how you apply the terraform script.
 
-(TASK 9) This is a Readme with some details regarding the solution why and how its made.
+## Prerequisites
+This assumes you already have a subscription for Azure
 
-Notes: 
--This assumes terraform and putty has been installed already
+1. Install Terraform
+2. Create Azure Service Principal 
+3. Create Azure keyvault
+4. Create Azure Storage
 
-Main Tools used: 
-Visual studio code - source code editor used for the assignment
-Putty              - shell client to connect to instance
-Github Desktop     - UI for my repository management tool
-Terraform          - for automating Ec2 instance provisioning
-Chocolatey         - to install TF
+### 1. Install Terraform 
+You can install terraform by following the instructions on the official docs.
+https://developer.hashicorp.com/terraform/downloads
+
+
+### 2. Create Azure Service Principal
+Follow instructions from the official docs 
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
+
+
+### 3. Create Azure Key vault
+You can execute the codes using bash/Azure Bash
+1.1 Change values of the variable depending on what you want 
+    RESOURCE_GROUP_NAME=rnd
+    STORAGE_ACCOUNT_NAME=tcastorageacc
+    CONTAINER_NAME=tfstate
+    VAULT_NAME=tcakeyvault
+    SECRET_NAME=azureuser
+
+1.2 Create a resource group to place the resources we will provision
+ ```bash
+az group create --name $RESOURCE_GROUP_NAME --location eastaustralia
+```
+
+1.3 Create Storage account (will be used to hold the vm password)
+ ```bash
+az storage account create --resource-group $RESOURCE_GROUP_NAME --name $STORAGE_ACCOUNT_NAME --sku Standard_LRS --encryption-services blob
+```
+
+1.4 Get Storage Account key
+ ```bash
+ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $STORAGE_ACCOUNT_NAME --query [0].value -o tsv
+```
+
+1.4 Create Blob Container
+ ```bash
+ az storage container create --name $CONTAINER_NAME --account-name $STORAGE_ACCOUNT_NAME --account-key $ACCOUNT_KEY
+
+    echo "storage_account_name: $STORAGE_ACCOUNT_NAME"
+    echo "container_name: $CONTAINER_NAME"
+    echo "access_key: $ACCOUNT_KEY"
+```
+
+1.4 Create Keyvault
+ ```bash
+az keyvault create -g $RESOURCE_GROUP_NAME --name $VAULT_NAME 
+```
+
+1.4 Set Secret Value to storage account key
+ ```bash
+az keyvault secret set --vault-name $VAULT_NAME --name $SECRET_NAME --value $ACCOUNT_KEY
+```
 
 CREATE AWES EC2 INSTANCE WITH TERRAFORM
 This will encompass task number 1-7
