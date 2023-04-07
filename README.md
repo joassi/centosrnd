@@ -27,12 +27,12 @@ This folder contains the following files:
 Note: there will be other files that will be created(or have been created) depending on how you apply the terraform script.
 
 
-## Prerequisites
+## Prerequisites 
 This assumes you already have a subscription for Azure
 
 1. Install Terraform
-2. Create Azure Service Principal 
-3. Create Azure keyvault and storage
+2. Create Azure Service Principal (Optional - only needed if recreating the script from scratch) 
+3. Create Azure keyvault and storage (Optional - only needed if recreating the script from scratch)
 
 
 ### 1. Install Terraform 
@@ -40,12 +40,12 @@ You can install terraform by following the instructions on the official docs.
 https://developer.hashicorp.com/terraform/downloads
 
 
-### 2. Create Azure Service Principal
+### 2. Create Azure Service Principal *Skip step*(Optional - only needed if recreating the script from scratch)
 Follow instructions from the official docs 
 https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/service_principal_client_secret
 
 
-### 3. Create Azure Key vault
+### 3. Create Azure Key vault *Skip step* (Optional - only needed if recreating the script from scratch)
 You can execute the codes using bash/Azure Bash
 
 1.1 Change values of the variable depending on what you want
