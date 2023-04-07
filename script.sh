@@ -2,7 +2,6 @@
 GOLANGURL="https://github.com/servian/TechChallengeApp/releases/download/v.0.11.0/TechChallengeApp_v.0.11.0_linux64.zip"
 sudo -i
 yum update -y
-
 yum install vim unzip -y
 yum -y install lynx
 cd /tmp/
@@ -19,12 +18,6 @@ chown -R golang.golang /usr/local/go/bin
 export PATH=$PATH:/usr/local/go/bin
 rm -rf /tmp/golang/
 
-
-cd /usr/local/golang/dist
-./TechChallengeApp updatedb
-
-
-
 systemctl start firewalld
 systemctl enable firewalld
 firewall-cmd --get-active-zones
@@ -34,4 +27,20 @@ firewall-cmd --zone=public --add-port=80/tcp --permanent
 
 firewall-cmd --zone=public --add-port=3000/tcp --permanent
 firewall-cmd --reload
+cd /usr/local/golang/dist
 
+
+
+./TechChallengeApp updatedb
+yum -y install lynx
+
+cat <<EOT>> /usr/local/golang/dist/conf.toml
+"DbUser" = "postgres"
+"DbPassword" = "changeme"
+"DbName" = "app"
+"DbPort" = "5432"
+"DbHost" = "localhost"
+"DbType" = "boltdb"
+"ListenHost" = "localhost"
+"ListenPort" = "80"
+EOT
