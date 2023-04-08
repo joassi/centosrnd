@@ -1,6 +1,6 @@
 #! /bin/bash
-GOLANGURL="https://github.com/servian/TechChallengeApp/releases/download/v.0.11.0/TechChallengeApp_v.0.11.0_linux64.zip"
 sudo -i
+GOLANGURL="https://github.com/servian/TechChallengeApp/releases/download/v.0.11.0/TechChallengeApp_v.0.11.0_linux64.zip"
 yum update -y
 yum install vim unzip -y
 yum -y install lynx
@@ -32,15 +32,4 @@ cd /usr/local/golang/dist
 
 
 ./TechChallengeApp updatedb
-yum -y install lynx
 
-cat <<EOT>> /usr/local/golang/dist/conf.toml
-"DbUser" = "postgres"
-"DbPassword" = "changeme"
-"DbName" = "app"
-"DbPort" = "5432"
-"DbHost" = "localhost"
-"DbType" = "boltdb"
-"ListenHost" = "localhost"
-"ListenPort" = "80"
-EOT
